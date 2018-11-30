@@ -11,7 +11,7 @@ class Camera(BaseCamera):
 
     @staticmethod
     def frames():
-        camera = cv2.VideoCapture('video.mp4',cv2.CAP_FFMPEG)
+        camera = cv2.VideoCapture(Camera.video_source)
         if not camera.isOpened():
             raise RuntimeError('Could not start camera.')
 
@@ -19,9 +19,8 @@ class Camera(BaseCamera):
             try:
                 # read current frame
                 _, img = camera.read()
-                # encode as a jpeg image and return it
-                ret, im_thresh = cv2.threshold( img, 128, 255, cv2.THRESH_BINARY )
-                yield cv2.imencode('.jpg', im_thresh)[1].tobytes()
+                # encode as a jpeg image and return it                
+                yield cv2.imencode('.jpg', img)[1].tobytes()
             except:
                 print 'error'
 

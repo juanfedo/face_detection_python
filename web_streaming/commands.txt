@@ -1,0 +1,2 @@
+From camera
+CAMERA=opencv python app.py
