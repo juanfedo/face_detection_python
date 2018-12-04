@@ -1,7 +1,7 @@
 Comandos face detection:
 
 Create database
-python recognize_faces_image.py --encodings encodings.pickle --image examples/example_01.png
+python encode_faces.py --dataset dataset --encodings encodings.pickle
 
 From image
 python recognize_faces_image.py --encodings encodings.pickle --image examples/example_03.png

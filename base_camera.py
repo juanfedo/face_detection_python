@@ -89,6 +89,7 @@ class BaseCamera(object):
     def _thread(cls):
         """Camera background thread."""
         print('Starting camera thread.')
+   
         frames_iterator = cls.frames()
         for frame in frames_iterator:
             BaseCamera.frame = frame
@@ -100,5 +101,6 @@ class BaseCamera(object):
             if time.time() - BaseCamera.last_access > 10:
                 frames_iterator.close()
                 print('Stopping camera thread due to inactivity.')
-                break
+                break            
+ 
         BaseCamera.thread = None
