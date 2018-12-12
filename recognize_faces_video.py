@@ -7,13 +7,22 @@ import time
 import cv2
 from base_camera import BaseCamera
 
+class Singleton:
+    __instance = None
+
+    @staticmethod
+    def getInstance():
+        if Singleton.__instance == None:
+            Singleton.__instance = VideoStream(src=0).start()
+        return Singleton.__instance 
+
 class VideoCamera():
 
     def __init__(self):
 		self.encodings = '/home/usuario/Codigo/face_detection_python/encodings.pickle'
 		print("[INFO] loading encodings...")
 		self.data = pickle.loads(open(self.encodings, "rb").read())
-		self.vs = VideoStream(src=0).start() 
+		self.vs = Singleton.getInstance()
 		time.sleep(2.0)
 
     def __del__(self):
