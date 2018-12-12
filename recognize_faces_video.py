@@ -6,14 +6,14 @@ import pickle
 import time
 import cv2
 
-class Singleton:
-    __instance = None
+class Camera_Singleton:
+    __camera = None
 
     @staticmethod
-    def getInstance():
-        if Singleton.__instance == None:
-            Singleton.__instance = VideoStream(src=0).start()
-        return Singleton.__instance 
+    def getCamera():
+        if Camera_Singleton.__camera == None:
+            Camera_Singleton.__camera = VideoStream(src=0).start()
+        return Camera_Singleton.__camera 
 
 class VideoCamera():
 
@@ -21,7 +21,7 @@ class VideoCamera():
 		self.encodings = '/home/usuario/Codigo/face_detection_python/encodings.pickle'
 		print("[INFO] loading encodings...")
 		self.data = pickle.loads(open(self.encodings, "rb").read())
-		self.vs = Singleton.getInstance()
+		self.vs = Camera_Singleton.getCamera()
 		time.sleep(2.0)
 
     def __del__(self):
