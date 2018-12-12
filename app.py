@@ -15,22 +15,28 @@ from recognize_faces_video import VideoCamera
 # Raspberry Pi camera module (requires picamera package)
 # from camera_pi import Camera
 
+class App_Singleton:
+    __application = None
+
+    @staticmethod
+    def getApplication():
+        if App_Singleton.__application == None:
+            App_Singleton.__application = VideoCamera()
+        return App_Singleton.__application 
+
+
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    """Video streaming home page."""
     return render_template('index.html')
 
-
-def gen(camera):
-    """Video streaming generator function."""
+def gen():
     while True:
-        frames = camera.frames()
+        frames = App_Singleton.getApplication().frames()        
         for frame in frames:
             yield (b'--frame\r\n'
                  b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
 
 @app.route('/video_feed')
 def video_feed():
@@ -38,10 +44,8 @@ def video_feed():
         print('REMOTE ADDRESS: ' + request.environ['REMOTE_ADDR'])
     else:
         print('REMOTE ADDRESS: ' + request.environ['HTTP_X_FORWARDED_FOR']) 
-    """Video streaming route. Put this in the src attribute of an img tag."""
-    return Response(gen(VideoCamera()),
+    return Response(gen(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
