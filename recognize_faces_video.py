@@ -5,7 +5,6 @@ import imutils
 import pickle
 import time
 import cv2
-from base_camera import BaseCamera
 
 class Singleton:
     __instance = None
