@@ -7,16 +7,6 @@ from multiprocessing.pool import ThreadPool
 import os
 os.system("taskset -a -p {}".format(os.getpid()))
 
-# import camera driver
-# if os.environ.get('CAMERA'):
-#     Camera = import_module('camera_' + os.environ['CAMERA']).Camera
-# else:
-#     #from camera import Camera
-#     from recognize_faces_video import Camera
-
-# Raspberry Pi camera module (requires picamera package)
-# from camera_pi import Camera
-
 class App_Singleton:
     __application = None
 
@@ -41,6 +31,7 @@ def gen():
             yield (b'--frame\r\n'
                  b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
+
 @app.route('/video_feed')
 def video_feed():
     if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
@@ -48,8 +39,7 @@ def video_feed():
     else:
         print('REMOTE ADDRESS: ' + request.environ['HTTP_X_FORWARDED_FOR'])
     async_result = pool.apply_async(gen)
-    return Response(async_result.get(),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(async_result.get(),mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)

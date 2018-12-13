@@ -8,12 +8,13 @@ import cv2
 from multiprocessing.pool import ThreadPool
 import os
 
-# os.system("taskset -p 0xfffff %d" % os.getpid())
-
 class VideoCamera():
 
+	result = None
+
 	def __init__(self):
-		self.encodings = '/home/cjfernan1/face/face_detection_python/encodings.pickle'
+		#self.encodings = '/home/cjfernan1/face/face_detection_python/encodings.pickle'
+		self.encodings = '/home/usuario/Codigo/face_detection_python/encodings.pickle'
 		print("[INFO] loading encodings...")
 		self.data = pickle.loads(open(self.encodings, "rb").read())
 		self.vs = VideoStream(src=0).start()
@@ -24,7 +25,7 @@ class VideoCamera():
 		self.vs.stop()
 
 	def worker(self,frame):
-		print (str(os.getpid()) + " is going to sleep...")
+		#print (str(os.getpid()) + " is going to sleep...")
 
 		detection_method=''
 		# convert the input frame from BGR to RGB then resize it to have
@@ -87,17 +88,21 @@ class VideoCamera():
 				0.75, (0, 255, 0), 2)
 		return frame
 
+	# def collect_frame(self,frame):
+	# 	dummy = 0
+
 	def frames(self):
-		print("[INFO] starting video stream...")
-		pool = ThreadPool(processes=2)
-		while True:
-			origin_time = time.time()
-			frame = self.vs.read()
-			#frame = self.worker(frame)
+		#print("[INFO] starting video stream...")
+		#pool = ThreadPool(processes=4)
 
-			async_result = pool.apply_async(self.worker, (frame, ))
-			frame = async_result.get()
+		origin_time = time.time()
+		frame = self.vs.read()
+		frame = self.worker(frame)
 
-			time_interval = time.time() - origin_time
-			print('TIEMPO {}'.format(time_interval))
-			yield cv2.imencode('.jpg', frame)[1].tobytes()
+		# async_result = pool.apply_async(self.worker, (frame, ),callback = self.collect_frame)
+		# frame = async_result.get()
+
+		time_interval = time.time() - origin_time
+		#print('TIEMPO {}'.format(time_interval))
+		yield cv2.imencode('.jpg', frame)[1].tobytes()
+			
