@@ -3,3 +3,4 @@ output/
 videos/
 dataset/
 recognize_faces_video.pyc
+venv/

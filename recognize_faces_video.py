@@ -18,7 +18,7 @@ class VideoCamera():
 		print("[INFO] loading encodings...")
 		self.data = pickle.loads(open(self.encodings, "rb").read())
 		self.vs = VideoStream(src=0).start()
-		os.system("taskset -a -p {}".format(os.getpid()))
+		#os.system("taskset -a -p {}".format(os.getpid()))
 		time.sleep(2.0)
 
 	def __del__(self):

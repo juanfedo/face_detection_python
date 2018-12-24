@@ -5,7 +5,8 @@ from flask import Flask, render_template, Response,request
 from recognize_faces_video import VideoCamera
 from multiprocessing.pool import ThreadPool
 import os
-os.system("taskset -a -p {}".format(os.getpid()))
+import time
+#os.system("taskset -a -p {}".format(os.getpid()))
 
 class App_Singleton:
     __application = None
@@ -25,8 +26,16 @@ def index():
 
 def gen():
     print('OS PID::::{}'.format(os.getpid()))
+    start_time = time.time()
+    x = 1 # displays the frame rate every 1 second
+    counter = 0
     while True:
         frames = App_Singleton.getApplication().frames()
+        counter+=1
+        if (time.time() - start_time) > x :
+            print("FPS: ", counter / (time.time() - start_time))
+            counter = 0
+            start_time = time.time()
         for frame in frames:
             yield (b'--frame\r\n'
                  b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
