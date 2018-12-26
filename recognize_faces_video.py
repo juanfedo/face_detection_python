@@ -17,7 +17,7 @@ class VideoCamera():
 		self.encodings = '/home/usuario/Codigo/face_detection_python/encodings.pickle'
 		print("[INFO] loading encodings...")
 		self.data = pickle.loads(open(self.encodings, "rb").read())
-		self.vs = VideoStream(src=0).start()
+		self.vs = VideoStream(src=1).start()
 		#os.system("taskset -a -p {}".format(os.getpid()))
 		time.sleep(2.0)
 
@@ -38,7 +38,7 @@ class VideoCamera():
 		# corresponding to each face in the input frame, then compute
 		# the facial embeddings for each face
 		boxes = face_recognition.face_locations(rgb,
-			model=detection_method)
+			model='cnn')
 		encodings = face_recognition.face_encodings(rgb, boxes)
 		names = []
 

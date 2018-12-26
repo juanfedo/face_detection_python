@@ -11,3 +11,6 @@ python recognize_faces_video_file.py --encodings encodings.pickle --input videos
 
 From camera
 python recognize_faces_video.py --encodings encodings.pickle --output output/webcam_face_recognition_output.avi --display 1
+
+Run with Gunicorn
+gunicorn --threads 5 --workers 1 --bind 0.0.0.0:5000 app:app
